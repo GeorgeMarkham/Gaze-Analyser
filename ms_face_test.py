@@ -1,6 +1,6 @@
 import http.client, urllib.request, urllib.parse, urllib.error, base64, requests, json
 
-subscription_key = '0f823364b6b140a1aa657fc73983357b'
+subscription_key = 'YOUR SUBSCRIPTION KEY'
 
 uri_base = 'https://northeurope.api.cognitive.microsoft.com/face/v1.0'
 

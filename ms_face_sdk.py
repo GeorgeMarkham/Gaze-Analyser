@@ -13,7 +13,7 @@ def get_img_from_webcam():
 
 
 #Variables holding account data
-SUBSCRIPTION_KEY = '0f823364b6b140a1aa657fc73983357b'
+SUBSCRIPTION_KEY = 'YOUR SUBSCRIPTION KEY'
 ENDPOINT = 'https://northeurope.api.cognitive.microsoft.com/face/v1.0/'
 
 #Apply account details to variables

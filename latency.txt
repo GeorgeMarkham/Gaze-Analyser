@@ -13,4 +13,5 @@
 -- outlier: 5.851623251044657
 
 
-#Mean of the means = 2.7385100418158497 seconds
+Mean of the means = 2.7385100418158497 seconds
+Average human response time is 0.25 seconds
