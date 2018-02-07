@@ -13,6 +13,7 @@ def get_img_from_webcam():
     else:
         return None
 
+
 #Set subscription key and base end point
 SUBSCRIPTION_KEY = 'YOUR SUBSCRIPTION KEY'
 ENDPOINT = 'https://northeurope.api.cognitive.microsoft.com/face/v1.0/'
@@ -30,14 +31,14 @@ params = {
 }
 try:
     #start the timer
-    start = timeit.default_timer()
+    #start = timeit.default_timer()
     
     #make the POST request using params and headers defined above
     #json is none as I'm not sending any json in the request body, all data being sent is throught the data parameter
     res = requests.request('POST', ENDPOINT + '/detect', json=None, data=get_img_from_webcam(), headers=headers, params=params)
     
     #stop the timer
-    stop = timeit.default_timer()
+    #stop = timeit.default_timer()
 
     head_rect_width = 0
     head_rect_left = 0
@@ -52,8 +53,8 @@ try:
         pupil_left_x = parsed_res[0]['faceLandmarks']['pupilLeft']['x']
         pupil_right_x = parsed_res[0]['faceLandmarks']['pupilRight']['x']
 
-        pupil_center = ((pupil_right_x-pupil_left_x)/2 + pupil_left_x)
-        head_center = (head_rect_width/2) + head_rect_left
+        #pupil_center = ((pupil_right_x-pupil_left_x)/2 + pupil_left_x)
+        #head_center = (head_rect_width/2) + head_rect_left
         
 
         gaze_pos = head_center - pupil_center
