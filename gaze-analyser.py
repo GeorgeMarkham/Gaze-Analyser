@@ -27,6 +27,8 @@ def pointprojection(left_pupil_x, left_pupil_y, right_pupil_x, right_pupil_y):
         rvecs = np.array(data['rvecs'])
         tvecs = np.array(data['tvecs'])
 
+        print(mtx)
+
         R = np.eye(3)
         T = np.array([[0],[1],[0]])
 
@@ -44,7 +46,7 @@ def pointprojection(left_pupil_x, left_pupil_y, right_pupil_x, right_pupil_y):
         z_coord_left = XX_left[:3][2]
 
         #gaze_angle_left = atan((y_coord_left/x_coord_left))
-
+        print("XX_left: ", XX_left)
         hyp_left = sqrt( ( (x_coord_left*x_coord_left) + (y_coord_left*y_coord_left) + (z_coord_left*z_coord_left) ) )
         print("\n\n\nhyp_left = \n", hyp_left)
 
@@ -61,7 +63,7 @@ def pointprojection(left_pupil_x, left_pupil_y, right_pupil_x, right_pupil_y):
         x_coord_right = XX_right[:3][0]
         y_coord_right = XX_right[:3][1]
         z_coord_right = XX_right[:3][2]
-
+        print("XX_right: ", XX_right)
         #gaze_angle_right = atan((y_coord_right/x_coord_right))
         #print("\n\n\nθ (right) = \n", gaze_angle_right)
 
