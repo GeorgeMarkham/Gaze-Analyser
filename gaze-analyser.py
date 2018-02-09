@@ -20,59 +20,20 @@ def get_img_from_webcam():
 
 
 #Function to do point projection on the data returned by MS Face API
-def pointprojection(left_pupil_x, left_pupil_y, right_pupil_x, right_pupil_y):
+def pointprojection(x,y):
     with np.load('calib_data.npz') as data:
-        mtx = np.array(data['mtx'])
-        dist = np.array(data['dist'])
-        rvecs = np.array(data['rvecs'])
-        tvecs = np.array(data['tvecs'])
+        K = np.array(data['mtx'])
 
-        print(mtx)
+        sx = K[0][0]
+        sy = K[1][1]
+        cx = K[0][2]
+        cy = K[1][2]
+        x_ext = ((x-cx)/sx)
+        y_ext = ((y-cy)/sy)
 
-        R = np.eye(3)
-        T = np.array([[0],[1],[0]])
-
-        P = mtx.dot(np.hstack((R,T)))
-        
-        x_left = np.array([left_pupil_x,left_pupil_y,1])
-        X_left = np.dot(lin.pinv(P), x_left)
-        X_left = X_left / X_left[3]
-
-        XX_left  = X_left[:]
-        XX_left[1] = X_left[2]
-        XX_left[2] = X_left[1]
-        x_coord_left = XX_left[:3][0]
-        y_coord_left = XX_left[:3][1]
-        z_coord_left = XX_left[:3][2]
-
-        #gaze_angle_left = atan((y_coord_left/x_coord_left))
-        print("XX_left: ", XX_left)
-        hyp_left = sqrt( ( (x_coord_left*x_coord_left) + (y_coord_left*y_coord_left) + (z_coord_left*z_coord_left) ) )
-        print("\n\n\nhyp_left = \n", hyp_left)
-
-        #print("\n\n\nθ (left) = \n", gaze_angle_left)
-        print('\nx_coord_left = \n', x_coord_left, '\ny_coord_left = \n', y_coord_left, '\nz_coord_left = \n', z_coord_left)
-
-        x_right = np.array([right_pupil_x,right_pupil_y,1])
-        X_right = np.dot(lin.pinv(P), x_right)
-        X_right = X_right / X_right[3]
-
-        XX_right  = X_right[:]
-        XX_right[1] = X_right[2]
-        XX_right[2] = X_right[1]
-        x_coord_right = XX_right[:3][0]
-        y_coord_right = XX_right[:3][1]
-        z_coord_right = XX_right[:3][2]
-        print("XX_right: ", XX_right)
-        #gaze_angle_right = atan((y_coord_right/x_coord_right))
-        #print("\n\n\nθ (right) = \n", gaze_angle_right)
-
-        hyp_right = sqrt( ( (x_coord_right*x_coord_right) + (y_coord_right*y_coord_right) + (z_coord_right*z_coord_right) ) )
-        print("\n\n\nhyp_right = \n", hyp_right)
-        print('\nx_coord_right = \n', x_coord_right, '\ny_coord_right = \n', y_coord_right, '\nz_coord_right = \n', z_coord_right)
-
-        plot3daxis(x_coord_left, y_coord_left, z_coord_left, x_coord_right, y_coord_right, z_coord_right)
-        #plot3daxis(x_coord_left, y_coord_left, z_coord_left)
+        coords = np.array([x_ext, y_ext, 1])
+        coords = np.hstack(coords)
+        return coords
 
 def plot3daxis(x,y,z,x2,y2,z2):
     w = 20
@@ -127,8 +88,10 @@ try:
         pupil_right_x = parsed_res[0]['faceLandmarks']['pupilRight']['x']
         pupil_right_y = parsed_res[0]['faceLandmarks']['pupilRight']['y']
 
-        pointprojection(left_pupil_x = pupil_left_x, left_pupil_y = pupil_left_y, right_pupil_x = pupil_right_x, right_pupil_y = pupil_right_y)
+        left_pupil_coords = pointprojection(x=pupil_left_x, y=pupil_left_y)
+        right_pupil_coords = pointprojection(x=pupil_right_x, y=pupil_right_y)
 
-
+        print(left_pupil_coords)
+        print(right_pupil_coords)
 except Exception as e:
     print(e)
