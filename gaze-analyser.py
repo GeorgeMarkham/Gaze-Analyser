@@ -53,6 +53,10 @@ def plot3daxis(x,y,z,x2,y2,z2):
     ax.set_xlim(-w,w);ax.set_ylim(-w,w);ax.set_zlim(-w,w)
     plt.show()
 
+def calculate_z(face_area):
+    z = (-5262*face_area) + 16489.333333
+    return z
+
 #Set subscription key and base end point
 SUBSCRIPTION_KEY = '9a296c80c0524db2bec178d1ad0efb61'
 ENDPOINT = 'https://northeurope.api.cognitive.microsoft.com/face/v1.0/'
