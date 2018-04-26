@@ -126,7 +126,7 @@ def calculate_point(gaze_angle, z, origin):
     return origin + offset
 
 #Set subscription key and base end point
-SUBSCRIPTION_KEY = '37165e3b8cd14ab79b81877aebfa4fd7'
+SUBSCRIPTION_KEY = 'YOUR API KEY'
 ENDPOINT = 'https://northeurope.api.cognitive.microsoft.com/face/v1.0/'
 
 #Set headers, octet-stream is to send an image to the api
@@ -151,6 +151,9 @@ if argv[1] == 'i' :
     parsed_response = parse_res(res)
     if len(parsed_response) > 0:
         metric_landmarks = get_metric(parsed_response)
+        gaze_angle = metric_landmarks['yaw'] + (( calculate_angle(metric_landmarks['eye_left_center'], metric_landmarks['pupil_left_x']) + calculate_angle(metric_landmarks['eye_right_center'], metric_landmarks['pupil_left_x']) )/2)
+        point = calculate_point(gaze_angle, 1, ( (metric_landmarks['eye_left_center'] + metric_landmarks['eye_right_center'])/2 ) )
+        print(point)
     else:
         print("Couldn't find any faces")
 
