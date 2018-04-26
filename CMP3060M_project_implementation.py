@@ -30,8 +30,7 @@ def parse_res(res):
 
     #Return dictionary
     parsed_res = json.loads(res.text)
-    print(len(parsed_res))
-    if(len(parsed_res) > 0):    
+    if(len(parsed_res) > 0):
         face_rect_width = parsed_res[0]['faceRectangle']['width']
         face_rect_height = parsed_res[0]['faceRectangle']['height']
 
@@ -79,8 +78,12 @@ def calculate_angle(center, pupil):
 
     return angle * (180/pi)
 
-def calculate_z(area, slope, intercept):
+def calculate_z(area):
+    predict_z_vals = np.load('predict_z_vals.npz')
+    slope = predict_z_vals['slope']
+    intercept = predict_z_vals['intercept']
     z = slope*area + intercept
+    print("z", z)
     return z
 
 def calculate_eye_center(eye_left_top, eye_left_bottom, eye_left_outer, eye_left_inner):
@@ -152,7 +155,7 @@ if argv[1] == 'i' :
     if len(parsed_response) > 0:
         metric_landmarks = get_metric(parsed_response)
         gaze_angle = metric_landmarks['yaw'] + (( calculate_angle(metric_landmarks['eye_left_center'], metric_landmarks['pupil_left_x']) + calculate_angle(metric_landmarks['eye_right_center'], metric_landmarks['pupil_left_x']) )/2)
-        point = calculate_point(gaze_angle, 1, ( (metric_landmarks['eye_left_center'] + metric_landmarks['eye_right_center'])/2 ) )
+        point = calculate_point(gaze_angle, calculate_z(metric_landmarks['face_area']), ( (metric_landmarks['eye_left_center'] + metric_landmarks['eye_right_center'])/2 ) )
         print(point)
     else:
         print("Couldn't find any faces")
@@ -165,7 +168,7 @@ elif argv[1] == 'c':
     if len(parsed_response) > 0:
         metric_landmarks = get_metric(parsed_response)
         gaze_angle = metric_landmarks['yaw'] + (( calculate_angle(metric_landmarks['eye_left_center'], metric_landmarks['pupil_left_x']) + calculate_angle(metric_landmarks['eye_right_center'], metric_landmarks['pupil_left_x']) )/2)
-        point = calculate_point(gaze_angle, 1, ( (metric_landmarks['eye_left_center'] + metric_landmarks['eye_right_center'])/2 ) )
+        point = calculate_point(gaze_angle, calculate_z(metric_landmarks['face_area']), ( (metric_landmarks['eye_left_center'] + metric_landmarks['eye_right_center'])/2 ) )
         print(point)
     else:
         print("Couldn't find any faces")
