@@ -1,6 +1,6 @@
 # Gaze-Analyser
-## This script was built to implement the algorithm outlined in A Study of Non-Invasive Gaze Detection Methods by George Markham
-### Written for an undergraduate dissertation project investigating non-invasive gaze detection
+## This script was built to implement the algorithm outlined in "A Study of Non-Invasive Gaze Detection Methods" by George Markham
+### Written for an undergraduate dissertation project at the University of Lincoln investigating non-invasive gaze detection
 
 To run with default system webcam:
 
