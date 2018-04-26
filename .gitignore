@@ -1,6 +1,0 @@
-*.txt
-*.json
-*.png
-./camera_calibration/*
-./Head_Size/
-./Head_Size/*
