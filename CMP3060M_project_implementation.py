@@ -83,7 +83,6 @@ def calculate_z(area):
     slope = predict_z_vals['slope']
     intercept = predict_z_vals['intercept']
     z = slope*area + intercept
-    print("z", z)
     return z
 
 def calculate_eye_center(eye_left_top, eye_left_bottom, eye_left_outer, eye_left_inner):
@@ -121,15 +120,18 @@ def get_metric(facial_landmarks):
     facial_landmarks_metric['eye_left_center'] = ((facial_landmarks['eye_left_center'][0]-cx)/sx) 
     facial_landmarks_metric['eye_right_center'] = ((facial_landmarks['eye_right_center'][0]-cx)/sx) 
     facial_landmarks_metric['yaw'] = facial_landmarks['yaw']
-    print(facial_landmarks_metric)
     return facial_landmarks_metric
 
 def calculate_point(gaze_angle, z, origin):
     offset = z * (tan(radians(gaze_angle)))
     return origin + offset
 
+
 #Set subscription key and base end point
-SUBSCRIPTION_KEY = 'YOUR API KEY'
+# SUBSCRIPTION_KEY = 'YOUR API KEY'
+# ENDPOINT = 'https://northeurope.api.cognitive.microsoft.com/face/v1.0/'
+
+SUBSCRIPTION_KEY = '0f823364b6b140a1aa657fc73983357b'
 ENDPOINT = 'https://northeurope.api.cognitive.microsoft.com/face/v1.0/'
 
 #Set headers, octet-stream is to send an image to the api
@@ -146,7 +148,13 @@ params = {
 
 predict_z = np.load('calib_data.npz')
 
+if len(argv) > 3: #Means z is passed as an argument
+    if argv[3] == 'z': 
+        z_val = float(argv[4])
+
+
 if argv[1] == 'i' :
+    #Use an image file
     img_file = argv[2]
     res = requests.request('POST', ENDPOINT + '/detect', json=None, data=get_img_from_file(img_file), headers=headers, params=params)
     parsed_response = parse_res(res)
@@ -155,7 +163,11 @@ if argv[1] == 'i' :
     if len(parsed_response) > 0:
         metric_landmarks = get_metric(parsed_response)
         gaze_angle = metric_landmarks['yaw'] + (( calculate_angle(metric_landmarks['eye_left_center'], metric_landmarks['pupil_left_x']) + calculate_angle(metric_landmarks['eye_right_center'], metric_landmarks['pupil_left_x']) )/2)
-        point = calculate_point(gaze_angle, calculate_z(metric_landmarks['face_area']), ( (metric_landmarks['eye_left_center'] + metric_landmarks['eye_right_center'])/2 ) )
+        
+        if(z_val == 0):
+            z_val = calculate_z(metric_landmarks['face_area'])
+        
+        point = calculate_point(gaze_angle, z_val, ( (metric_landmarks['eye_left_center'] + metric_landmarks['eye_right_center'])/2 ) )
         print(point)
     else:
         print("Couldn't find any faces")
@@ -167,8 +179,12 @@ elif argv[1] == 'c':
     parsed_response = parse_res(res)
     if len(parsed_response) > 0:
         metric_landmarks = get_metric(parsed_response)
+
+        if(z_val == 0):
+            z_val = calculate_z(metric_landmarks['face_area'])
+
         gaze_angle = metric_landmarks['yaw'] + (( calculate_angle(metric_landmarks['eye_left_center'], metric_landmarks['pupil_left_x']) + calculate_angle(metric_landmarks['eye_right_center'], metric_landmarks['pupil_left_x']) )/2)
-        point = calculate_point(gaze_angle, calculate_z(metric_landmarks['face_area']), ( (metric_landmarks['eye_left_center'] + metric_landmarks['eye_right_center'])/2 ) )
+        point = calculate_point(gaze_angle, z_val, ( (metric_landmarks['eye_left_center'] + metric_landmarks['eye_right_center'])/2 ) )
         print(point)
     else:
         print("Couldn't find any faces")
