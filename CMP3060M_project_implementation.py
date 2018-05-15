@@ -131,7 +131,7 @@ def calculate_point(gaze_angle, z, origin):
 # SUBSCRIPTION_KEY = 'YOUR API KEY'
 # ENDPOINT = 'https://northeurope.api.cognitive.microsoft.com/face/v1.0/'
 
-SUBSCRIPTION_KEY = '0f823364b6b140a1aa657fc73983357b'
+SUBSCRIPTION_KEY = 'SUBSCRIPTION_KEY'
 ENDPOINT = 'https://northeurope.api.cognitive.microsoft.com/face/v1.0/'
 
 #Set headers, octet-stream is to send an image to the api
