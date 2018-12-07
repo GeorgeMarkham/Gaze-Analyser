@@ -2,7 +2,7 @@
 ## This script was built to implement the algorithm outlined in "A Study of Non-Invasive Gaze Detection Methods" by George Markham
 ### Written for an undergraduate dissertation project at the University of Lincoln investigating non-invasive gaze detection
 
-Paper can be found at: https://www.overleaf.com/read/rtwhggkhdvnj
+Paper can be found at: https://drive.google.com/open?id=1gXERtXfCjmaNEUYDCdCDp-vBfFRuudEu
 
 To run with default system webcam:
 
